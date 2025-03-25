@@ -1,12 +1,49 @@
-// este import existe solo para que tsc lo tome y lo copie a /build
-import "./contacts.json";
-// si no estuviera este import typescript no se da cuenta que lo necesitamos
-// ya que para escribir o leer al archivo usamos la libreria "jsonfile"
+///importamos json
+import contacts from "./contacts.json";
+import fs from 'fs'
+///
+
 
 class Contact {
   id: number = 0;
   name: string = "";
+  constructor(id:number,name:string){
+    this.id = id;
+    this.name = name;
+  }
 }
 
-class ContactsCollection {}
+
+
+class ContactsCollection {
+  allContacts : Contact[] = [];  
+
+  load(){
+    const contactos = JSON.parse(fs.readFileSync('./contacts.json',"utf-8"));
+    this.allContacts = contactos
+  }
+  
+  getAll(){
+    return this.allContacts
+  }
+  
+  addOne(nuevoContacto:Contact){
+    
+    this.allContacts.push(nuevoContacto)
+  }
+  
+  save(){
+    fs.writeFileSync('./contacts.json',JSON.stringify(this.allContacts,null,2))
+  }
+  getOneById(id){
+    const buscar = this.allContacts.find(x => x.id === id)
+    return buscar || null
+
+  }
+
+}
+
+
+
 export { ContactsCollection };
+
