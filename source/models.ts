@@ -1,8 +1,7 @@
-///importamos json
-import { get } from "http";
-import contacts from "./contacts.json";
-import fs from 'fs'
-///
+const contacts = require("./contacts.json");
+const jsonfile = require('jsonfile');
+
+ 
 
 
 export class Contact {
@@ -17,12 +16,10 @@ export class Contact {
 
 
 class ContactsCollection {
-  allContacts : Contact[] = [];  
+  allContacts :  Contact[] = [];  
 
   load(){
-    const fs = require("fs")
-    const contactos = JSON.parse(fs.readFileSync('./contacts.json',"utf-8"));
-    this.allContacts = contactos
+    this.allContacts = contacts;
   }
   
   getAll(){
@@ -30,16 +27,14 @@ class ContactsCollection {
   }
   
   addOne(nuevoContacto:Contact){
-    
     this.allContacts.push(nuevoContacto)
   }
   
   save(){
-    this.load()
-    const fs = require("fs")
-    const transformar = JSON.stringify(this.allContacts,null,2)
-    fs.writeFileSync('./contacts.json',transformar)
+    jsonfile.writeFileSync(__dirname + "/contacts.json", this.allContacts, { spaces: 2 });
   }
+
+
   getOneById(id){
     const buscar = this.allContacts.find(x => x.id === id)
     return buscar || null
@@ -48,4 +43,3 @@ class ContactsCollection {
 
 }
 export { ContactsCollection };
-
