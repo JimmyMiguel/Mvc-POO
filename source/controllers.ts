@@ -15,22 +15,28 @@ class ContactsController {
   }
 
   processOptions(options: ContactsControllerOptions) {
-    if (options.action === 'get' && options.params === null) {
-      this.contacts.getAll()
+
+    if ((options.action === "get" || options.action === null) && typeof options.params.id === 'number'){
+       return this.contacts.getOneById(options.params.id)
     }
 
-    if (options.action == null && options.params === Number){
-      this.contacts.getOneById(options.params)
+
+    if (options.action === 'get' && typeof options.params.id === 'undefined') {
+       return this.contacts.getAll()
     }
+
 
     if(options.action === "save"){
-      this.contacts.addOne(options.params)
+      const parametros =  options.params
+      this.contacts.addOne(parametros)
+      this.contacts.save()
+      return this.contacts.getAll()
     }
+    throw new Error("Acción no válida o parámetros incorrectos");
 
-
-  }
+   }
 }
 
 export { ContactsController };
 
-
+ 

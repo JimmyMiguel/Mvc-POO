@@ -43,3 +43,5 @@ class ContactsCollection {
 
 }
 export { ContactsCollection };
+
+console.log(contacts[3])
